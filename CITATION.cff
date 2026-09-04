@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use TAFR-Knee in research, please cite this software."
+title: "TAFR-Knee: Trade-off-Active Finite-Radius Knee Detection via Preference Stability"
+type: software
+authors:
+  - family-names: Wang
+    given-names: Hongxuan
+version: 0.1.0
+date-released: 2026-09-04
+url: "https://github.com/beam4869/TAFR_Knee"
+repository-code: "https://github.com/beam4869/TAFR_Knee"
+license: MIT
+keywords:
+  - multiobjective optimization
+  - knee point
+  - preference stability
+
