@@ -1,0 +1,6 @@
+[submodule "external/snee"]
+	path = external/snee
+	url = https://github.com/tommaso-giovannelli/snee.git
+[submodule "external/pmops"]
+	path = external/pmops
+	url = https://github.com/GYResearch/PMOPs-Benchmark.git

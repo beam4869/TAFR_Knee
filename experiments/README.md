@@ -1,0 +1,24 @@
+# Common-core experiments
+
+This branch implements the user-supplied six-phase plan, starting with exact
+mechanism checks. The base package is commit
+`9f7a65d7ffeaddedf2969b7db3d764623e0cca27` (v0.1.0). Experimental variants are
+named explicitly; upstream code and package defaults are not silently changed.
+
+```bash
+git submodule update --init --recursive
+python -m pip install -e '.[dev]' pandas pyyaml scikit-learn
+python -m experiments.runners.run_adversarial
+```
+
+Every bundle records code/dependency commits, configuration, environment, and seeds.
+Raw values are the source of processed tables and figures. Null fields denote
+unmeasured/not applicable quantities. An LP oracle is exact for the finite supplied
+table up to solver tolerances; a sampled audit is an empirical lower bound on
+worst-case displacement. It does not provide a global certificate.
+
+External code lives in pinned submodules under `external/`. The SNEE README states
+GNU LGPL availability; its repository does not contain a separate license file or
+specify an LGPL version. PMOPs includes its original EPL-2.0 license and source
+notices. Those resources retain their own terms, separate from this package's MIT
+license. Uploaded papers and personal CV materials are not redistributed here.
