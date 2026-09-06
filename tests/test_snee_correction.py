@@ -1,14 +1,17 @@
 """Derivative correctness and isolation from the official reproduction."""
+from pathlib import Path
+
 import numpy as np
 import pytest
-from pathlib import Path
 
 pytest.importorskip("sklearn")
 pytestmark = pytest.mark.skipif(
     not (Path(__file__).resolve().parents[1] / "external/snee/functions.py").exists(),
     reason="Pinned SNEE submodule is required")
 
-from experiments.methods.snee_adapter import make_upstream
+def make_upstream(*args, **kwargs):
+    from experiments.methods.snee_adapter import make_upstream as upstream
+    return upstream(*args, **kwargs)
 
 
 @pytest.mark.parametrize("normalized", [False, True])

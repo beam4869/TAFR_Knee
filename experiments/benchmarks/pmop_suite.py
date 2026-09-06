@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 from scipy.io import loadmat
 from scipy.stats import qmc
-from experiments.common import ROOT
+ROOT = Path(__file__).resolve().parents[2]
 
 SOURCE=ROOT/'external/pmops/PlatEMO/Problems/PMOPs'
 A=[4,4,4,6,1,2,4,4,2,1,4,4,2,2]

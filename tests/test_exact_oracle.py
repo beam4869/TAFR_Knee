@@ -1,5 +1,10 @@
 import numpy as np
-from experiments.benchmarks.adversarial_tabular import extreme_plateau, interior_cell, incomplete_vertices
+
+from experiments.benchmarks.adversarial_tabular import (
+    extreme_plateau,
+    incomplete_vertices,
+    interior_cell,
+)
 from experiments.metrics.exact_tabular_oracle import ExactTabularOracle
 from tafrknee.weights import perturbation_weights
 

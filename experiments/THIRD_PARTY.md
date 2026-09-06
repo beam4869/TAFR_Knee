@@ -20,3 +20,16 @@ attributed experiment implementation, not a claimed official author release.
 The SNEE paper version is arXiv:2501.16993v3 (19 March 2026). Code and paper
 versions are recorded independently. The upstream GRV2 Hessian discrepancy and
 the adapter-v1/v2 distinction are documented in README.md and diagnostics.json.
+
+`experiments/benchmarks/pmop_decision.py` is a derived Python port of the pinned
+PMOP objective functions and is explicitly marked EPL-2.0. The surrounding
+experiment harness retains the repository's license. `validate_pmop_port.py`
+executes temporary wrappers around the original MATLAB function bodies in
+Octave, with shared inputs; it does not edit the submodule or redistribute
+modified upstream source files.
+
+The source-preserving port retains these upstream behaviors: PMOP1 sets `g=0`;
+PMOP6 with linkage writes `temp2` while reading zero-initialized `temp`; PMOP7
+uses a broadcast sum and a positive cosine product in its distance function;
+PMOP10 computes a distance expression into `g` while leaving `g7` at zero.
+Any mathematical correction requires a separately named benchmark variant.
