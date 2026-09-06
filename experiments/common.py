@@ -27,12 +27,14 @@ def provenance():
             versions[package] = importlib.metadata.version(package)
         except importlib.metadata.PackageNotFoundError:
             versions[package] = None
+    from scipy.optimize._highspy import _core
+    versions["HiGHS"] = ".".join(str(getattr(_core,"HIGHS_VERSION_"+v)) for v in ("MAJOR","MINOR","PATCH"))
     cpu = platform.processor()
     if Path("/proc/cpuinfo").exists():
         cpu = next((line.split(":", 1)[1].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
                     if line.startswith("model name")), cpu)
     return dict(git_sha=git_sha(), external_commit_shas={
-        name: git_sha(ROOT / "external" / name) for name in ("snee", "pmops")
+        name: git_sha(ROOT / "external" / name) for name in ("snee", "pmops", "ammonia") if (ROOT / "external" / name).exists()
     }, python=platform.python_version(), platform=platform.platform(), cpu=cpu,
                 versions=versions, dirty=bool(subprocess.check_output(
                     ["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, text=True).strip()))
