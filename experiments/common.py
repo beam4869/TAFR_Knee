@@ -20,6 +20,9 @@ def git_sha(path=ROOT):
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=path, text=True).strip()
 
 
+_START_SHA = git_sha()
+_START_SOURCE_HASHES = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for root in (ROOT / "experiments", ROOT / "src") for p in root.rglob("*.py")}
+
 def provenance():
     versions = {}
     for package in ("numpy", "scipy", "matplotlib", "pandas", "PyYAML", "scikit-learn"):
@@ -33,7 +36,7 @@ def provenance():
     if Path("/proc/cpuinfo").exists():
         cpu = next((line.split(":", 1)[1].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
                     if line.startswith("model name")), cpu)
-    return dict(git_sha=git_sha(), external_commit_shas={
+    return dict(git_sha=_START_SHA, tafr_base_sha="9f7a65d7ffeaddedf2969b7db3d764623e0cca27", source_sha256=_START_SOURCE_HASHES, external_commit_shas={
         name: git_sha(ROOT / "external" / name) for name in ("snee", "pmops", "ammonia") if (ROOT / "external" / name).exists()
     }, python=platform.python_version(), platform=platform.platform(), cpu=cpu,
                 versions=versions, dirty=bool(subprocess.check_output(
@@ -76,7 +79,7 @@ def write_bundle(name, config, results):
     bundle = dict(provenance=prov, config=config, results=results)
     path = RESULTS / "raw" / (name + ".json")
     save_json(path, bundle)
-    path.with_suffix(".yaml").write_text(yaml.safe_dump(config, sort_keys=False))
+    path.with_suffix(".yaml").write_text(yaml.safe_dump(jsonable(config), sort_keys=False))
     return path
 
 

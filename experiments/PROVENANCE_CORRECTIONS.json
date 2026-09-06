@@ -1,0 +1,21 @@
+{
+  "reason": "Early bundles sampled git HEAD at serialization. Concurrent experiment jobs and commits mean that field is a packaging checkpoint, not always the execution-start revision. This explicit ledger preserves the original records and identifies the launch revisions. New runners freeze the source revision and Python-file SHA256 values at import.",
+  "tafr_core_sha": "9f7a65d7ffeaddedf2969b7db3d764623e0cca27",
+  "execution_start_revisions": {
+    "adversarial_phase1": "977d0a3",
+    "snee_reproduction": "e9def7a",
+    "pmop_pilot": "873ecdd",
+    "pmop_pilot_table_range": "6229d02",
+    "snee_comparison_pilot": "c206822",
+    "snee_multistart": "c206822",
+    "ammonia_pilot": "8a5cc8b",
+    "discrete_pilot": "8a5cc8b",
+    "scalability_pilot": "8a5cc8b",
+    "snee_reproduction_v2": "88651d2",
+    "snee_multistart_v2": "88651d2",
+    "ammonia_pilot_global_range": {
+      "CAISO_LA-Jan-row624": "3c166b2",
+      "ISO_NE-year-row5904": "833fa8d"
+    }
+  }
+}

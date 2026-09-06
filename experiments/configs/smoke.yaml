@@ -1,0 +1,5 @@
+phase: smoke
+commands:
+  - python -m pytest -q tests/test_exact_oracle.py
+  - python -m experiments.runners.run_diagnostics
+expected_runtime: less than a few minutes

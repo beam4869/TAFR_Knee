@@ -48,8 +48,13 @@ def main():
     pilots=[next(w for w in chosen if w['stratum']=='low' and w['market']=='CAISO_LA'),
             next(w for w in chosen if w['stratum']=='high' and w['market']=='ISO_NE')]
     results=[]
+    existing=RESULTS/'raw'/f'ammonia_pilot{suffix}.json'
+    if suffix and existing.exists():
+        import json
+        results=json.loads(existing.read_text())['results']
     for w in pilots:
         name=f"{w['market']}-{w.get('month','year')}-row{w['row']}"
+        if any(r['problem']==name for r in results):continue
         p=AmmoniaProblem(w['price'],w['emission'],cfg['lower_level_time_limit'],cfg['mip_relative_gap'])
         try:
             if suffix:

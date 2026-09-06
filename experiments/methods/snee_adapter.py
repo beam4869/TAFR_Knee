@@ -39,7 +39,7 @@ def make_upstream(name, algorithm="NM", seed=0, normalized=False, flatten_jacobi
     # flattens that array only; upstream files and mathematical functions stay intact.
     if flatten_jacobian and f.prob.constrained:
         original=f.grad_f_weighted_vars
-        f.grad_f_weighted_vars=lambda w,x: np.asarray(original(w,x)).flatten()
+        f.grad_f_weighted_vars=lambda w,x: (np.asarray(original(w,x)).flatten() if np.asarray(x).ndim==1 else original(w,x))
     scale=np.ones(f.prob.num_obj); ideal=np.zeros(f.prob.num_obj)
     if normalized:
         anchors=[]

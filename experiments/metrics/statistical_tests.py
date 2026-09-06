@@ -21,6 +21,6 @@ def compare(matrix):
     if x.shape[1]>=3 and not np.all(x==x[:,[0]]):out['friedman_p']=float(friedmanchisquare(*x.T).pvalue)
     for j in range(1,x.shape[1]):
         p=1. if np.allclose(x[:,0],x[:,j]) else float(wilcoxon(x[:,0],x[:,j],zero_method='pratt').pvalue)
-        out['pairs'].append({'versus':j,'p':p,'A12_lower_is_better':a12(x[:,0],x[:,j])})
+        out['pairs'].append({'versus':j,'p':p,'A12_lower_is_better':1-a12(x[:,0],x[:,j])})
     for row,p in zip(out['pairs'],holm([r['p'] for r in out['pairs']])):row['holm_p']=float(p)
     return out

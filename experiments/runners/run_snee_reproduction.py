@@ -22,13 +22,13 @@ def main():
         except Exception as exc:
             row=dict(status="failed",error=type(exc).__name__+": "+str(exc),traceback=traceback.format_exc())
         row.update(problem=name,algorithm=algorithm,variant=variant,wall_time_seconds=perf_counter()-t)
-        save_json(RESULTS/"raw/snee_individual"/f"{name}_{algorithm}_{variant}.json",row)
+        save_json(RESULTS/"raw/snee_individual_v2"/f"{name}_{algorithm}_{variant}.json",row)
         return
     cfg=config_file("snee_reproduction"); rows=[]
     for name in cfg["problems"]:
         for algorithm in cfg["algorithms"]:
             for variant in cfg["variants"]:
-                path=RESULTS/"raw/snee_individual"/f"{name}_{algorithm}_{variant}.json"
+                path=RESULTS/"raw/snee_individual_v2"/f"{name}_{algorithm}_{variant}.json"
                 if not path.exists():
                     try:
                         proc=subprocess.run([sys.executable,"-m",__name__.replace("__main__","experiments.runners.run_snee_reproduction"),
@@ -42,7 +42,7 @@ def main():
                                             timeout_seconds=cfg["timeout_seconds"]))
                 row=json.loads(path.read_text());rows.append(row)
                 print(name,algorithm,variant,row["status"],row.get("mcf"),flush=True)
-                write_bundle("snee_reproduction",cfg,rows)
+                write_bundle("snee_reproduction_v2",{**cfg,"adapter_version":2},rows)
 
 
 if __name__=="__main__": main()

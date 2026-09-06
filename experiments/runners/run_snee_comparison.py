@@ -23,7 +23,7 @@ def child(name,seed,variant):
 
 
 def worker(job):
-    name,seed,variant=job;path=RESULTS/'raw/snee_multistart'/f'{name}-{seed}-{variant}.json'
+    name,seed,variant=job;path=RESULTS/'raw/snee_multistart_v2'/f'{name}-{seed}-{variant}.json'
     if path.exists():return json.loads(path.read_text())
     try:
         r=subprocess.run([sys.executable,'-m','experiments.runners.run_snee_comparison','--child',name,str(seed),variant],
@@ -36,7 +36,7 @@ def worker(job):
 def main():
     cfg=config_file('pmop_oracle');cfg.update(candidate_budget=17,validation_samples=256,phase='shared-solver pilot')
     rows=[];details=[]
-    for name in NAMES:
+    for name in ([] if '--multistart-only' in sys.argv else NAMES):
         try:
             p=SneeProblem(name)
             # Only symmetric cases have a justified analytic target here.
@@ -52,8 +52,8 @@ def main():
             results.append(f.result())
             if len(results)%30==0:
                 print('multi-start completed',len(results),flush=True)
-                write_bundle('snee_multistart',dict(seeds=list(range(30)),variants=['scipy_shape_compatibility','normalized'],per_job_timeout_seconds=60),results)
-    write_bundle('snee_multistart',dict(seeds=list(range(30)),variants=['scipy_shape_compatibility','normalized'],per_job_timeout_seconds=60),results)
+                write_bundle('snee_multistart_v2',dict(seeds=list(range(30)),variants=['scipy_shape_compatibility','normalized'],per_job_timeout_seconds=60),results)
+    write_bundle('snee_multistart_v2',dict(seeds=list(range(30)),variants=['scipy_shape_compatibility','normalized'],per_job_timeout_seconds=60),results)
 
 
 if __name__=='__main__':

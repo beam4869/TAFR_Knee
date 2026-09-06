@@ -1,0 +1,4 @@
+completed_mechanisms: [no_normalization,pairwise_only,vertices_only,no_nonextreme,meaningful_gain,abstention,unsupported_scalarization,grouped_certification_counterexample]
+pending_full_matrix: [stability_radius_tiebreak,original_space_reduction_search,TAFR_AWT_direct_MILP]
+core_defaults_changed: false
+meaningful_gain_variant: {min_improvement: 0.001, min_deterioration: 0.001}
