@@ -43,13 +43,18 @@ def main():
     import sys
     suffix='_global_range' if '--global-range' in sys.argv else ''
     if suffix:cfg.update(candidate_budget=17,interior_samples=8,stability_iterations=6,normalization_policy='global_objective_bounds',variant='global_bounds_with_larger_search_budget')
+    all_windows = '--all-windows' in sys.argv
+    bundle_name = ('ammonia_all_windows' if all_windows else 'ammonia_pilot') + suffix
+    if all_windows:
+        cfg.update(phase='12-window direct-MILP extension', enforce_validation_ratio=10)
     save_json(RESULTS/f'raw/ammonia_window_inventory{suffix}.json',dict(config=cfg,windows=windows,selected_12=chosen,
         units=['USD/kWh','kgCO2/kWh'],dates='source year/month and row identifiers; no inferred timestamps'))
     pilots=[next(w for w in chosen if w['stratum']=='low' and w['market']=='CAISO_LA'),
             next(w for w in chosen if w['stratum']=='high' and w['market']=='ISO_NE')]
+    if all_windows:pilots=chosen
     results=[]
-    existing=RESULTS/'raw'/f'ammonia_pilot{suffix}.json'
-    if suffix and existing.exists():
+    existing=RESULTS/'raw'/f'{bundle_name}.json'
+    if (suffix or all_windows) and existing.exists():
         import json
         results=json.loads(existing.read_text())['results']
     for w in pilots:
@@ -73,7 +78,7 @@ def main():
             out=dict(problem=name,status='completed',window=w,rows=rr,info=info,schedules=schedules)
         except Exception as e:out=dict(problem=name,status='failed',window=w,error=repr(e))
         out['solver_logs']=p.logs;out['total_MILP_calls']=p.calls
-        results.append(out);write_bundle('ammonia_pilot'+suffix,cfg,results);print(name,out['status'],p.calls,flush=True)
+        results.append(out);write_bundle(bundle_name,cfg,results);print(name,out['status'],p.calls,flush=True)
 
 
 if __name__=='__main__':main()

@@ -73,7 +73,9 @@ def evaluate(problem,name,family,cfg,knees=None,region=None,seed=0,table_exact=F
                 values=legacy['raw_objectives'];w=w*normalizer.scale;w/=w.sum()
             else:values=e.solve(w).objectives
             yn=normalizer.transform(values)
-            validation=hit_and_run_samples(w,kc.radius,cfg['validation_samples'],seed=seed+cfg['validation_seed_offset'],burn_in=64)
+            validation_count = max(cfg['validation_samples'],
+                int(cfg.get('enforce_validation_ratio', 0) * (a.perturbation_count if a else 0)))
+            validation=hit_and_run_samples(w,kc.radius,validation_count,seed=seed+cfg['validation_seed_offset'],burn_in=64)
             vv=np.array([normalizer.transform(e.solve(u).objectives) for u in validation]);d=np.linalg.norm(vv-yn,axis=1)
             Rval=float(d.max());expected=float(d.mean());persistence=float(np.mean(d<=kc.objective_tolerance))
             if a:Rreported=a.robustness
@@ -95,7 +97,9 @@ def evaluate(problem,name,family,cfg,knees=None,region=None,seed=0,table_exact=F
             lower_level_failures=len(failures),wall_time_seconds=elapsed,
             expected_displacement=expected,persistence_probability=persistence,
             validation_type='exact finite table' if oracle_result else 'independent hit-and-run lower bound',
-            validation_samples=cfg['validation_samples'],normalization_ideal=normalizer.ideal,normalization_reference=normalizer.reference,
+            validation_samples=validation_count if w is not None else 0,
+            training_radius_audit_points=a.perturbation_count if a else None,
+            normalization_ideal=normalizer.ideal,normalization_reference=normalizer.reference,
             **resultmetrics)
         if a:
             # Persist absolute exits, including inactive ones; reported K is the
