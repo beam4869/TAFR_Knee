@@ -22,3 +22,10 @@ GNU LGPL availability; its repository does not contain a separate license file o
 specify an LGPL version. PMOPs includes its original EPL-2.0 license and source
 notices. Those resources retain their own terms, separate from this package's MIT
 license. Uploaded papers and personal CV materials are not redistributed here.
+
+### PMOP normalization diagnosis
+The first 42-instance run records 33 frozen payoff failures: deterministic
+lexicographic single-objective ties omit some objective ranges. This is retained
+as `pmop_pilot.json`. The separate `--table-range` oracle-front variant supplies
+finite-table minima/maxima through the existing API. It uses PF information and
+must not be described as the production anchor-only normalizer or direct search.

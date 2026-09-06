@@ -33,7 +33,10 @@ def candidates(m,budget,seed):
 
 
 def evaluate(problem,name,family,cfg,knees=None,region=None,seed=0,table_exact=False):
-    t0=perf_counter();normalizer,anchors=fit_normalizer(problem)
+    t0=perf_counter()
+    if cfg.get('normalization_policy')=='oracle_table_range':
+        normalizer,anchors=fit_normalizer(problem,ideal=problem.y.min(axis=0),reference=problem.y.max(axis=0))
+    else:normalizer,anchors=fit_normalizer(problem)
     payoff=np.array([a.objectives for a in anchors]);an=normalizer.transform(payoff)
     e=ColdEngine(problem,normalizer,identity_reduction(problem.n_objectives))
     ws=candidates(problem.n_objectives,cfg['candidate_budget'],seed)
@@ -115,9 +118,12 @@ def evaluate(problem,name,family,cfg,knees=None,region=None,seed=0,table_exact=F
 def pmop():
     from experiments.benchmarks.pmop_suite import load_instance
     cfg=config_file('pmop_oracle');rows=[];instances=[]
+    import sys
+    suffix='_table_range' if '--table-range' in sys.argv else ''
+    if suffix:cfg['normalization_policy']='oracle_table_range'
     for m in cfg['objectives']:
         for number in cfg['problems']:
-            key=f'PMOP{number}-{m}';path=RESULTS/'raw/pmop_individual'/f'{key}.json'
+            key=f'PMOP{number}-{m}';path=RESULTS/f'raw/pmop_individual{suffix}'/f'{key}.json'
             if path.exists():
                 import json
                 saved=__import__('json').loads(path.read_text());rows.extend(saved['rows']);instances.append(saved['instance']);continue
@@ -137,7 +143,7 @@ def pmop():
                 meta.update(info,status='completed',supported_mask=support,wall_time_seconds=perf_counter()-t)
             except Exception as error:rr=[];meta=dict(problem=key,status='failed',error=repr(error))
             save_json(path,dict(rows=rr,instance=meta));rows.extend(rr);instances.append(meta)
-            write_bundle('pmop_pilot',cfg,dict(rows=rows,instances=instances))
+            write_bundle('pmop_pilot'+suffix,cfg,dict(rows=rows,instances=instances))
             print(key,meta['status'],round(perf_counter()-t,2),flush=True)
 
 
