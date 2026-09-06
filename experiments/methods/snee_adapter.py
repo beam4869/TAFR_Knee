@@ -15,7 +15,7 @@ from experiments.common import ROOT
 def load_upstream():
     # Upstream uses torch solely to seed an unused backend; do not require a
     # several-hundred-MB numerical package for those no-op seed calls.
-    if importlib.util.find_spec("torch") is None and "torch" not in sys.modules:
+    if "torch" not in sys.modules and importlib.util.find_spec("torch") is None:
         torch=types.ModuleType("torch")
         torch.Tensor=type("Tensor",(),{})
         torch.manual_seed=lambda seed: None

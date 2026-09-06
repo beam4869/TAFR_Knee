@@ -1,0 +1,26 @@
+problems:
+- GRV2
+- ZLT1
+- GRV1
+- VFM1
+- ZLT1q
+- DAS1
+- DO2DK
+- DO2DKtight
+- VFM1constr
+algorithms:
+- NM
+- DIRECT
+problem_seed: 42
+optimizer_seed: 0
+paper_version: 2501.16993v3
+code_era: January-February 2025; version mismatch is reported
+timeout_seconds: 90
+variants:
+- published
+- scipy_shape_compatibility
+- normalized
+final_seeds: 30
+pilot_candidate_budget: 65
+radius: 0.05
+minimum_gain_variant: 0.001
