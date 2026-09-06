@@ -2,6 +2,11 @@
 
 # Common-core experiments
 
+The 6 September continuation is documented in [CONTINUATION.md](CONTINUATION.md),
+including the paired campaigns, independent Octave checks, result interpretation,
+and remaining final-paper gates. Public artifact availability is described in
+[PUBLICATION_STATUS.md](PUBLICATION_STATUS.md).
+
 This branch implements the user-supplied six-phase plan, starting with exact
 mechanism checks. The base package is commit
 `9f7a65d7ffeaddedf2969b7db3d764623e0cca27` (v0.1.0). Experimental variants are

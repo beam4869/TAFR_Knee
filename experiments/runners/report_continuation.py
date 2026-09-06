@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from experiments.common import RESULTS, jsonable, save_json
+from experiments.common import RESULTS, jsonable, provenance, raw_row, save_json
 from experiments.metrics.statistical_tests import compare
 
 OUT = RESULTS / 'continuation'
@@ -102,7 +102,30 @@ def main():
            title='Independent validation of the selected weights')
     fig.tight_layout(); figure(fig, 'ablation_exact_validation')
 
-    snee = pd.DataFrame(read('snee_hessian')['results'])
+    snee_bundle = read('snee_hessian')
+    snee = pd.DataFrame(snee_bundle['results'])
+    for result in snee_bundle['results']:
+        values = result.get('objectives')
+        # Analytic GRV2 payoff anchors are (0,20) and (20,0).
+        normalized = None if values is None else np.asarray(values) / 20
+        error = None if values is None else float(np.linalg.norm(normalized - .1))
+        all_rows.append(raw_row(
+            problem_family='SNEE', problem_name='GRV2', instance='GRV2-2',
+            method='SNEE-' + result['algorithm'], seed=result['seed'],
+            variant=result['hessian'] + '/' + result['normalization'],
+            scalarization='weighted_sum', n_objectives=2, n_variables=2,
+            git_sha=snee_bundle['provenance']['git_sha'],
+            external_commit_shas=snee_bundle['provenance']['external_commit_shas'],
+            selected=result['status'] == 'completed', certified=None,
+            abstained=result['status'] != 'completed', selected_weight=result.get('weight'),
+            raw_objectives=values, normalized_objectives=normalized, knee_error=error,
+            success_001=error is not None and error <= .01,
+            success_0025=error is not None and error <= .025,
+            success_005=error is not None and error <= .05,
+            solver_calls=result.get('solver_calls'), objective_calls=result.get('objective_calls'),
+            gradient_calls=result.get('gradient_calls'), hessian_calls=result.get('hessian_calls'),
+            wall_time_seconds=result.get('wall_time_seconds'), status=result['status'],
+            reporting_normalization='analytic anchors [0,0] to [20,20]; search normalization is separate'))
     snee.groupby(['algorithm', 'normalization', 'hessian'], as_index=False).agg(
         trials=('status', 'size'), completed=('status', lambda s: (s == 'completed').sum()),
         median_knee_distance=('distance_to_analytic_knee', 'median'),
@@ -165,11 +188,14 @@ def main():
         pmop_failed_seed_jobs=sum(j['status'] != 'completed' for j in jobs),
         ablation_rows=len(ablation), snee_hessian_rows=len(snee),
         ammonia_windows=len(ammonia['results']), pmop_direct_instances=len(direct),
-        partial=len(jobs) != expected, raw_failure_records=len(failures),
+        pmop_direct_lower_solves=sum(r['solver_calls'] for r in direct),
+        pmop_direct_lower_budget_exhaustions=sum(r['lower_budget_exhaustions'] for r in direct),
+        partial=len(jobs) != expected, raw_failure_records=len(failures), standardized_rows=len(all_rows),
         maximum_ammonia_affine_residual=float(checks.affine_identity_residual.abs().max()),
         lower_solver_warning='Track B DE iteration limits retained; no global certificates',
         timing_warning='PMOP checkpoints include both original LP and LP-validated accelerated stability; do not pool timing as a uniform implementation benchmark')
     save_json(OUT / 'completion.json', status)
+    save_json(OUT / 'processing_provenance.json', provenance())
     print(json.dumps(status, indent=2))
 
 

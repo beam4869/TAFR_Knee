@@ -21,8 +21,8 @@ The SNEE paper version is arXiv:2501.16993v3 (19 March 2026). Code and paper
 versions are recorded independently. The upstream GRV2 Hessian discrepancy and
 the adapter-v1/v2 distinction are documented in README.md and diagnostics.json.
 
-`experiments/benchmarks/pmop_decision.py` is a derived Python port of the pinned
-PMOP objective functions and is explicitly marked EPL-2.0. The surrounding
+`experiments/benchmarks/pmop_decision.py` and `pmop_suite.py` are derived Python
+ports of the pinned PMOP objective functions and are explicitly marked EPL-2.0. The surrounding
 experiment harness retains the repository's license. `validate_pmop_port.py`
 executes temporary wrappers around the original MATLAB function bodies in
 Octave, with shared inputs; it does not edit the submodule or redistribute

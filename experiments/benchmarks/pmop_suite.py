@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: EPL-2.0
 """Analytic PF mapping transcribed from pinned PMOP{1,...,14}.m PF methods.
 
 This is an oracle-front track, not a full-decision global optimizer. Official

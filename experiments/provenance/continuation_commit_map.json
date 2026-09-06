@@ -1,0 +1,76 @@
+{
+  "purpose": "Map execution-start commits to equivalent GitHub API publication commits. API publication changes commit metadata and parent IDs; source files are preserved.",
+  "core_base": "9f7a65d7ffeaddedf2969b7db3d764623e0cca27",
+  "mapping": [
+    {
+      "local": "60448b8b024b7f7ee6aed961962335b0858aead1",
+      "paths": [
+        "experiments/benchmarks/pmop_decision.py",
+        "experiments/configs/pmop_paired.yaml",
+        "experiments/runners/run_paired_pmop.py",
+        "experiments/runners/validate_pmop_port.py"
+      ],
+      "remote": "5eebdb15c9816ed60d1dfeca33cff33335703e0b",
+      "tree": "ff82d05bae2e1d84dec403033eb353794f318336"
+    },
+    {
+      "local": "6a6a00c9a8c2fa06697b93710007b3817a0bafa4",
+      "paths": [
+        "experiments/runners/run_ammonia.py",
+        "experiments/runners/run_pilots.py"
+      ],
+      "remote": "d54af2780b08b52c8bd413c144450d90d6d4bee2",
+      "tree": "a8323083787f40d9073aa79c98f50f02088ef45d"
+    },
+    {
+      "local": "2681e8f982536b111b22186fcff2fb3a50150d3f",
+      "paths": [
+        "experiments/configs/ablation_paired.yaml",
+        "experiments/runners/run_ablation.py"
+      ],
+      "remote": "04d9b361d6bba21128538efb2b52fad6487471ea",
+      "tree": "09fe646492e859827eef08553fd3778dd37a8cf6"
+    },
+    {
+      "local": "be82eead53515321dd986cdbc81e49b2d85da22c",
+      "paths": [
+        "experiments/configs/pmop_direct_pilot.yaml",
+        "experiments/methods/pmop_solver.py",
+        "experiments/runners/run_pmop_direct.py",
+        "tests/test_pmop_solver.py"
+      ],
+      "remote": "436e43711f402e7fd07a7a261ff3692a415bcf1d",
+      "tree": "6b94945a5069564c7431884ce7905d73a1eafa33"
+    },
+    {
+      "local": "98767be85641d1401f3598debe99607650c97805",
+      "paths": [
+        "experiments/common.py"
+      ],
+      "remote": "138e1c4a312c78e28e37b66f6630e57208586a0e",
+      "tree": "4f95abab978d8dd020ac6ffa14f9ec56ddebfb19"
+    },
+    {
+      "local": "45bca89e1953c6823f295b0998bb0f02a61061b1",
+      "paths": [
+        "experiments/metrics/exact_tabular_oracle.py",
+        "experiments/runners/run_paired_pmop.py",
+        "tests/test_fast_stability.py"
+      ],
+      "remote": "6e1de06e62358a4a1549ae7782e553a44de767a7",
+      "tree": "aa179f1944eabe5096c3ddd042a3edcab6c0f36c"
+    },
+    {
+      "local": "fc2ec4a006724479deca9029c1bf800a65b74ea2",
+      "paths": [
+        "experiments/THIRD_PARTY.md",
+        "experiments/benchmarks/pmop_suite.py",
+        "experiments/runners/report_continuation.py",
+        "tests/test_exact_oracle.py",
+        "tests/test_snee_correction.py"
+      ],
+      "remote": "fbe37085af89e60327fa3b07297aa84115120fae",
+      "tree": "96874654321714f4c8b33aee0b85b66902b80599"
+    }
+  ]
+}
