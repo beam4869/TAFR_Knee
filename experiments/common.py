@@ -17,11 +17,19 @@ RESULTS = ROOT / "experiments/results"
 
 
 def git_sha(path=ROOT):
+    top = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], cwd=path, text=True).strip()
+    if Path(top).resolve() != Path(path).resolve():
+        raise ValueError(f"Not an initialized repository root: {path}")
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=path, text=True).strip()
 
 
 _START_SHA = git_sha()
 _START_SOURCE_HASHES = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for root in (ROOT / "experiments", ROOT / "src") for p in root.rglob("*.py")}
+_START_CODE_STATUS = subprocess.check_output(
+    ["git", "status", "--porcelain", "--untracked-files=all", "--", "src", "experiments/*.py",
+     "experiments/configs", "experiments/benchmarks", "experiments/methods",
+     "experiments/metrics", "experiments/runners", "experiments/plots", "tests"],
+    cwd=ROOT, text=True).strip()
 
 def provenance():
     versions = {}
@@ -37,9 +45,10 @@ def provenance():
         cpu = next((line.split(":", 1)[1].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
                     if line.startswith("model name")), cpu)
     return dict(git_sha=_START_SHA, tafr_base_sha="9f7a65d7ffeaddedf2969b7db3d764623e0cca27", source_sha256=_START_SOURCE_HASHES, external_commit_shas={
-        name: git_sha(ROOT / "external" / name) for name in ("snee", "pmops", "ammonia") if (ROOT / "external" / name).exists()
+        name: git_sha(ROOT / "external" / name) for name in ("snee", "pmops", "ammonia") if (ROOT / "external" / name / ".git").exists()
     }, python=platform.python_version(), platform=platform.platform(), cpu=cpu,
-                versions=versions, dirty=bool(subprocess.check_output(
+                versions=versions, dirty=bool(_START_CODE_STATUS), source_status_at_start=_START_CODE_STATUS,
+                packaging_dirty=bool(subprocess.check_output(
                     ["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, text=True).strip()))
 
 
