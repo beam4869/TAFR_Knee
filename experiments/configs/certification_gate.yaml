@@ -1,0 +1,14 @@
+phase: exploratory selection and evidence gate
+cases: [A, B, C, D, flat_gain, linear, unsupported, portfolio0, portfolio1, portfolio2]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+candidate_budget: 17
+radius: 0.05
+objective_tolerance: 0.001
+min_gain: 0.001
+interior_samples: 8
+stability_iterations: 6
+exit_step: 0.01
+exit_layers: 4
+workers: 4
+pmop_postfilter_tolerances: [0.001, 0.01, 0.025, 0.05]
+interpretation: Same finite tables and paired seeds as the earlier ablation; exploratory, not held-out tuning or an equal-budget benchmark
