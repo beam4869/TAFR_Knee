@@ -31,6 +31,7 @@ class ExactTabularOracle:
         self.priorities = canonical_priorities(self.y) if priorities is None else np.asarray(priorities)
         self.tolerance = tolerance
         self.lp_calls = 0
+        self._whole_simplex_reachability = None
 
     def _lp(self, *args, **kwargs):
         self.lp_calls += 1
@@ -45,6 +46,9 @@ class ExactTabularOracle:
         center = np.asarray(center, float)
         lower = np.maximum(0, center - radius)
         upper = np.minimum(1, center + radius)
+        whole_simplex = bool(np.all(lower == 0) and np.all(upper == 1))
+        if whole_simplex and self._whole_simplex_reachability is not None:
+            return tuple(a.copy() for a in self._whole_simplex_reachability)
         reached, witnesses = [], []
         for s in range(self.n):
             competitors = np.arange(self.n) != s
@@ -58,7 +62,10 @@ class ExactTabularOracle:
             if res.success and (not strict.any() or res.x[-1] > self.tolerance):
                 reached.append(s)
                 witnesses.append(res.x[:self.m])
-        return np.asarray(reached, int), np.asarray(witnesses)
+        answer = np.asarray(reached, int), np.asarray(witnesses)
+        if whole_simplex:
+            self._whole_simplex_reachability = tuple(a.copy() for a in answer)
+        return answer
 
     def audit(self, center, radius):
         nominal = self.select(center)
@@ -99,3 +106,39 @@ class ExactTabularOracle:
                            bounds=[(0, 1)] * self.m)
             flags.append(bool(res.success))
         return np.asarray(flags)
+
+    def stability_radius_fast(self, center, epsilon=0.0):
+        """Isolated-output cell radius by bounded-simplex linear minimization.
+
+        If the epsilon ball contains another objective row, use the original
+        cell-union LP algorithm. Otherwise leaving the nominal output means
+        violating one of its optimality halfspaces. A linear objective over a
+        box-constrained simplex is minimized exactly by filling coordinates in
+        increasing coefficient order. Bisection locates the first violation.
+        This computes the same supremum as stability_radius, up to 1e-12.
+        Dominated/duplicate competitors are excluded since they cannot strictly
+        beat the nominal objective; deterministic boundary ties do not alter a
+        supremum. The original LP implementation remains available as a check.
+        """
+        center = np.asarray(center, float)
+        nominal = self.select(center)
+        near = np.linalg.norm(self.y - self.y[nominal], axis=1) <= epsilon + 1e-12
+        if near.sum() != 1:
+            return self.stability_radius(center, epsilon)
+        differences = self.y - self.y[nominal]
+        differences = differences[np.min(differences, axis=1) < -1e-12]
+        high = float(np.max(np.maximum(center, 1 - center)))
+        if not len(differences): return high
+        order = np.argsort(differences, axis=1)
+        ordered = np.take_along_axis(differences, order, axis=1)
+        low = 0.
+        for _ in range(44):
+            radius = (low + high) / 2
+            lower, upper = np.maximum(0, center - radius), np.minimum(1, center + radius)
+            caps = (upper - lower)[order]
+            before = np.cumsum(caps, axis=1) - caps
+            allocation = np.minimum(caps, np.maximum(0, 1 - lower.sum() - before))
+            best_gap = differences @ lower + np.sum(ordered * allocation, axis=1)
+            if np.min(best_gap) < 0: high = radius
+            else: low = radius
+        return (low + high) / 2

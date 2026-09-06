@@ -41,6 +41,7 @@ def instance_job(number, m, cfg):
                     finite_table_sha256=hashlib.sha256(y.tobytes()).hexdigest(),
                     supported_mask=support, normalization_ideal=ideal, normalization_scale=scale)
     rows = []
+    validation_cache = {}
     for seed in cfg["seeds"]:
         path = RESULTS / "raw/pmop_paired" / f"PMOP{number}-{m}-{seed}.json"
         if path.exists():
@@ -66,12 +67,17 @@ def instance_job(number, m, cfg):
                 row["supported_metrics"] = (metrics([] if yn is None else [yn], targets[support])
                                              if support.any() else None)
                 if row["selected_weight"] is not None:
-                    exact = oracle.audit(row["selected_weight"], cfg["radius"])
+                    key = tuple(row["selected_weight"])
+                    if key not in validation_cache:
+                        validation_cache[key] = (
+                            oracle.audit(row["selected_weight"], cfg["radius"]),
+                            oracle.stability_radius_fast(row["selected_weight"], cfg["objective_tolerance"]))
+                    exact, exact_radius = validation_cache[key]
                     row["R_validation"] = exact["robustness"]
                     row["exact_worst_weight"] = exact["worst_weight"]
                     row["validation_type"] = "exact finite-table LP"
-                    row["exact_stability_radius"] = oracle.stability_radius(
-                        row["selected_weight"], cfg["objective_tolerance"])
+                    row["exact_stability_radius"] = exact_radius
+                    row["exact_stability_algorithm"] = "bounded-simplex halfspaces, with cell-union LP fallback"
                     if row["R_reported"] is not None:
                         row["audit_gap"] = row["R_validation"] - row["R_reported"]
                         row["false_reported_bound"] = row["audit_gap"] > 1e-7
