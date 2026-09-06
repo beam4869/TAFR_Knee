@@ -20,7 +20,8 @@ from tafrknee.audit import audit_prepared_weight
 from tafrknee.normalization import FrozenNormalizer
 from tafrknee.reduction import identity_reduction
 
-VARIANTS = ("core_screen", "sampled_radius_gate", "exact_radius_gate", "exact_all_exits")
+VARIANTS = ("core_screen", "sampled_radius_gate",
+            "conservative_radius_gate", "conservative_all_exits")
 
 
 def source_fingerprint():
@@ -88,31 +89,33 @@ def run_case(name, cfg, output):
                 keep = a.certified
                 if variant == "sampled_radius_gate":
                     keep = keep and a.robustness <= config.objective_tolerance
-                elif variant == "exact_radius_gate":
+                elif variant == "conservative_radius_gate":
                     keep = keep and e["radius_status"] == "verified"
-                elif variant == "exact_all_exits":
+                elif variant == "conservative_all_exits":
                     keep = e["accepted"]
                 if keep:
                     eligible.append(index)
             def ranking(i, exact=exact, variant=variant, audits=audits):
                 e = exact[i]
-                if variant == "exact_all_exits":
-                    return (e["R_exact"], -e["exact_stability_radius"],
+                if variant == "conservative_all_exits":
+                    return (e["R_upper"], -e["conservative_stability_radius"],
                             -e["exit_tradeoff"], tuple(audits[i].weight))
                 return old_rank(audits[i])
             selected = min(eligible, key=ranking) if eligible else None
             row = dict(case=name, seed=seed, variant=variant, selected=selected is not None,
                        eligible_candidates=len(eligible), selected_candidate=selected,
-                       R_reported=None, R_exact=None, selected_above_epsilon=False,
-                       radius_status="unverified", exit_certificate_passed=False,
+                       R_reported=None, R_upper=None, upper_bound_above_epsilon=False,
+                       witness_above_epsilon=False,
+                       radius_status="unverified", full_table_rule_passed=False,
                        selected_objectives=None, selected_weight=None, knee_error=None)
             if selected is not None:
                 a, e = audits[selected], exact[selected]
-                value = e["R_exact"]
-                row.update(R_reported=a.robustness, R_exact=value,
-                           selected_above_epsilon=value > config.objective_tolerance,
+                value = e["R_upper"]
+                row.update(R_reported=a.robustness, R_upper=value,
+                           upper_bound_above_epsilon=value > config.objective_tolerance,
+                           witness_above_epsilon=e.get("R_witness", 0) > config.objective_tolerance,
                            radius_status=e["radius_status"],
-                           exit_certificate_passed=e["accepted"],
+                           full_table_rule_passed=e["accepted"],
                            selected_objectives=a.normalized_objectives,
                            selected_weight=a.weight,
                            knee_error=None if target is None else

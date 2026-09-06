@@ -34,8 +34,8 @@ def test_analytic_plateau_positive_control_and_closed_ball_endpoint():
     config = KneeConfig(min_improvement=.001, min_deterioration=.001)
     result = certify_table_weight(oracle, [.5, .5], config)
     assert result["accepted"]
-    assert result["R_exact"] == 0
-    assert result["exact_stability_radius"] == pytest.approx(.1, abs=1e-9)
+    assert result["R_upper"] == 0
+    assert result["conservative_stability_radius"] == pytest.approx(.1, abs=1e-9)
     assert result["exit_tradeoff"] == pytest.approx(1.5)
     # At rho itself the lexicographic tie includes an extreme output. A radius
     # supremum is not a guarantee for the closed weight ball at that endpoint.
@@ -56,7 +56,7 @@ def test_missing_outputs_reject_a_sampled_passing_bound(family, radius, epsilon)
     assert sampled < epsilon
     checked = certify_table_weight(oracle, w, KneeConfig(radius=radius,
                                                         objective_tolerance=epsilon))
-    assert checked["R_exact"] > epsilon
+    assert checked["R_upper"] > epsilon
     assert checked["radius_status"] == "refuted"
 
 
@@ -79,3 +79,30 @@ def test_lp_numerical_failure_never_becomes_a_certificate():
         pytest.raises(RuntimeError, match="Unresolved cell LP"),
     ):
         certify_table_weight(CheckedTableOracle(extreme_plateau() / 10), [.5, .5], KneeConfig())
+
+
+@pytest.mark.parametrize("last_x,center", [(.59, .5), (.61, .2 / .42)])
+def test_tiny_strict_margin_cannot_hide_a_large_output_jump(last_x, center):
+    y = np.array([[0, 1], [1, 0], [.39, .39], [last_x - 1e-9, .19]])
+    weight = np.array([center + .01, 1 - center - .01])
+    witness = np.array([center + 1e-15, 1 - center - 1e-15])
+    oracle = CheckedTableOracle(y)
+    assert np.max(np.abs(witness - weight)) <= .01
+    assert oracle.select(witness) == 3
+    assert np.linalg.norm(y[3] - y[2]) > .28
+    result = certify_table_weight(oracle, weight,
+                                 KneeConfig(radius=.01, objective_tolerance=.001))
+    assert result["R_upper"] > .28
+    assert result["radius_status"] != "verified"
+    assert not result["accepted"]
+
+
+def test_tie_only_outputs_are_conservative_and_do_not_claim_refutation():
+    # At this zero-radius tie, lexicographic selection returns only row 0.
+    # Conservative reachability also keeps row 1, so lower and upper differ.
+    oracle = CheckedTableOracle([[0., 1.], [1., 0.]])
+    result = oracle.audit([.5, .5], 0.)
+    assert result["lower_bound"] == 0
+    assert result["robustness"] == pytest.approx(np.sqrt(2))
+    assert radius_evidence(.001, lower_bound=result["lower_bound"],
+                           upper_bound=result["robustness"]) == "unverified"
