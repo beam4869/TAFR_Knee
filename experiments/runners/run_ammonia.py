@@ -40,7 +40,10 @@ def inventory():
 
 def main():
     cfg=config_file('ammonia');windows,chosen=inventory()
-    save_json(RESULTS/'raw/ammonia_window_inventory.json',dict(config=cfg,windows=windows,selected_12=chosen,
+    import sys
+    suffix='_global_range' if '--global-range' in sys.argv else ''
+    if suffix:cfg.update(candidate_budget=17,interior_samples=8,stability_iterations=6,normalization_policy='global_objective_bounds',variant='global_bounds_with_larger_search_budget')
+    save_json(RESULTS/f'raw/ammonia_window_inventory{suffix}.json',dict(config=cfg,windows=windows,selected_12=chosen,
         units=['USD/kWh','kgCO2/kWh'],dates='source year/month and row identifiers; no inferred timestamps'))
     pilots=[next(w for w in chosen if w['stratum']=='low' and w['market']=='CAISO_LA'),
             next(w for w in chosen if w['stratum']=='high' and w['market']=='ISO_NE')]
@@ -49,6 +52,9 @@ def main():
         name=f"{w['market']}-{w.get('month','year')}-row{w['row']}"
         p=AmmoniaProblem(w['price'],w['emission'],cfg['lower_level_time_limit'],cfg['mip_relative_gap'])
         try:
+            if suffix:
+                cfg['fixed_ideal']=np.array([p.solve(v).objectives[i] for i,v in enumerate(np.eye(4))])
+                cfg['fixed_reference']=np.array([p.solve(-v).objectives[i] for i,v in enumerate(np.eye(4))])
             rr,info=evaluate(p,name,'ammonia',cfg)
             schedules=[]
             for row in rr:
@@ -62,7 +68,7 @@ def main():
             out=dict(problem=name,status='completed',window=w,rows=rr,info=info,schedules=schedules)
         except Exception as e:out=dict(problem=name,status='failed',window=w,error=repr(e))
         out['solver_logs']=p.logs;out['total_MILP_calls']=p.calls
-        results.append(out);write_bundle('ammonia_pilot',cfg,results);print(name,out['status'],p.calls,flush=True)
+        results.append(out);write_bundle('ammonia_pilot'+suffix,cfg,results);print(name,out['status'],p.calls,flush=True)
 
 
 if __name__=='__main__':main()

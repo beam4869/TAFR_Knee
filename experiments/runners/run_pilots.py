@@ -34,7 +34,9 @@ def candidates(m,budget,seed):
 
 def evaluate(problem,name,family,cfg,knees=None,region=None,seed=0,table_exact=False):
     t0=perf_counter()
-    if cfg.get('normalization_policy')=='oracle_table_range':
+    if 'fixed_ideal' in cfg:
+        normalizer,anchors=fit_normalizer(problem,ideal=cfg['fixed_ideal'],reference=cfg['fixed_reference'])
+    elif cfg.get('normalization_policy')=='oracle_table_range':
         normalizer,anchors=fit_normalizer(problem,ideal=problem.y.min(axis=0),reference=problem.y.max(axis=0))
     else:normalizer,anchors=fit_normalizer(problem)
     payoff=np.array([a.objectives for a in anchors]);an=normalizer.transform(payoff)
@@ -112,7 +114,7 @@ def evaluate(problem,name,family,cfg,knees=None,region=None,seed=0,table_exact=F
             row['MC_RI_postanalysis']=ri;row['MC_RI_curve']=curve
         rows.append(row)
     return rows,dict(config=asdict(kc),normalization_ideal=normalizer.ideal,normalization_reference=normalizer.reference,
-        selection_audits=len(audits),candidate_failures=failures,CHIM=meta,all_solver_calls_including_validation=e.solver_calls)
+        selection_audits=len(audits),audits=[dict(weight=a.weight,certified=a.certified,reasons=a.reasons,R=a.robustness,stability=a.stability_radius,exit_tradeoff=a.exit_tradeoff) for a in audits],candidate_failures=failures,CHIM=meta,all_solver_calls_including_validation=e.solver_calls)
 
 
 def pmop():

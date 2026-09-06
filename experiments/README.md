@@ -29,3 +29,14 @@ lexicographic single-objective ties omit some objective ranges. This is retained
 as `pmop_pilot.json`. The separate `--table-range` oracle-front variant supplies
 finite-table minima/maxima through the existing API. It uses PF information and
 must not be described as the production anchor-only normalizer or direct search.
+
+### Ammonia interpretation
+The primary pilot uses the original payoff normalization and five candidates.
+`--global-range` is a separately named diagnostic with four anti-anchor solves,
+17 candidates and six radius bisections. It changes bounds AND search budget;
+its outcome does not isolate the causal effect of normalization alone. The
+source safety objective is H2 electrolyzer throughput divided by 33.3. It does
+not include source-declared but unused startup, inventory or ramp-risk terms.
+When total NH3 is fixed, water and safety are affinely dependent. Window strata
+use temporal price-carbon Pearson correlation as an explicit proxy, not the
+cost-emission correlation of feasible schedules. All forecasts stay fixed.
