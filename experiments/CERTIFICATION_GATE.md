@@ -164,7 +164,8 @@ The separate raw archive also supports restoration with
 `raw_records.zip` beside `raw_manifest.json`. Automatic approval review blocked
 public upload of the new raw archive and its checksum inventories pending
 authorization for those specific records and metadata.
-The repository's runner can regenerate them from the published configuration.
+The runner and report generator can regenerate the measurements and report-input
+inventory from the published configuration.
 
 The runner checks source fingerprints, table hashes and configurations before
 reusing atomic per-seed checkpoints. The report refuses incomplete campaigns
