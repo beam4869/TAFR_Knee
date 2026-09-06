@@ -1,0 +1,21 @@
+{
+  "status": "CLEAN",
+  "critical": 0,
+  "major": 0,
+  "minor": 0,
+  "review_scope": "CERTIFICATION_GATE.md and supporting code/results",
+  "independent_review": true,
+  "tests_passed": 49,
+  "tests_skipped": 3,
+  "skip_reason": "Pinned SNEE submodule absent",
+  "paired_controls_matched": 300,
+  "source_core_unchanged": true,
+  "mechanical_counts": {
+    "em_dashes": 0,
+    "passive": 0,
+    "factual_negations": 5,
+    "pairwise_jargon": 1,
+    "other_hits": 0
+  },
+  "evidence": "Independent review rechecked all 1860 input hashes, numerical regression witnesses, report tables, figure and archive integrity."
+}

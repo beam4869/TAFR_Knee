@@ -1,0 +1,18 @@
+{
+  "expected_seed_jobs": 300,
+  "observed_seed_jobs": 300,
+  "candidate_audits": 5100,
+  "selection_records": 1200,
+  "original_control_mismatches": 0,
+  "pmop_source_seed_jobs": 1260,
+  "pmop_mode": "postfilter only; no reselection",
+  "source_fingerprint": "45f863c3c11ed9c3f5e168ba82bc26d3af58982fe3496dee7cabab64e50aac81",
+  "rejection_counts": {
+    "too_close_to_anchor": 3423,
+    "fixed_radius_bound_unresolved": 460,
+    "fixed_radius_bound_exceeded": 341,
+    "exit_tradeoff_below_threshold": 232
+  },
+  "partial": false,
+  "production_core_modified": false
+}

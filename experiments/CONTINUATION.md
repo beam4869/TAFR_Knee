@@ -1,5 +1,12 @@
 # Experiment continuation, 6 September 2026
 
+The subsequent [certification gate study](CERTIFICATION_GATE.md) completes a
+paired comparison of radius and exit conditions. It also fixes a strict-margin
+omission in a separate conservative finite-table oracle. The historical PMOP
+LP audits below require conservative revalidation before supporting certificates.
+Its new raw archive awaits explicit public-upload authorization; code and
+aggregate outcomes accompany the study.
+
 The production package remains at v0.1.0 and its source is byte-for-byte unchanged
 from `9f7a65d7ffeaddedf2969b7db3d764623e0cca27`. This continuation implements
 additional experiments in separate, named variants. It is not a final-paper

@@ -96,7 +96,7 @@ def pmop_postfilters(cfg):
     frame = pd.DataFrame(records)
     summary = frame.groupby(["m", "epsilon", "gate"], sort=True).agg(
         trials=("selected", "size"), returns=("selected", "sum"),
-        upper_bound_above_epsilon=("above_epsilon", "sum"),
+        historical_lp_above_epsilon=("above_epsilon", "sum"),
         successes_0025=("success_0025", "sum"),
         reported_understatements=("missed_bound", "sum")).reset_index()
     return summary, inputs

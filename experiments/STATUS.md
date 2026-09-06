@@ -1,4 +1,9 @@
-# Execution status
+# Historical pilot status
+
+For the completed later campaigns, read [CONTINUATION.md](CONTINUATION.md).
+The latest criterion study and the numerical oracle correction are in
+[CERTIFICATION_GATE.md](CERTIFICATION_GATE.md). The table below preserves the
+earlier pilot's scope and outstanding work at that time.
 
 This is a mechanism-validation and pilot release, not the final paper experiment matrix.
 Core source under `src/tafrknee` remains unchanged from 9f7a65d7.

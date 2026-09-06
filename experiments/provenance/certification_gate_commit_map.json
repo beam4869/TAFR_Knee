@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/beam4869/TAFR_Knee",
+  "branch": "experiments/common-core-v1",
+  "local_to_github_api_commit": {
+    "83b2e238295358b0426ff4b14a354b74b70f448c": "a9ebf13a37a105af505706b255ecd9c578d70107",
+    "3925650ab0a8eb163b47b94202498366c9125f5a": "b6414d928846beb694f67b23a4e021009bb61056",
+    "5fba137b3be0af4f071ada9d18a0983c5e2c9e45": "9d59da68c756e59eebb45c9da30f3ea04291ff8d"
+  },
+  "final_measurement_local_commit": "5fba137b3be0af4f071ada9d18a0983c5e2c9e45",
+  "initial_results_superseded_after_numerical_review": true,
+  "raw_publication_status": "blocked by automatic approval review; requires explicit authorization for raw_records.zip"
+}

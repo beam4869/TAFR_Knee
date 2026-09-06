@@ -2,6 +2,11 @@
 
 # Common-core experiments
 
+Latest: [conservative radius and exit checks](CERTIFICATION_GATE.md), including
+the strict-margin oracle correction and the distinction between stability
+tolerance and a requested displacement limit. Its raw archive has a separate
+public-upload authorization status described in that report.
+
 The 6 September continuation is documented in [CONTINUATION.md](CONTINUATION.md),
 including the paired campaigns, independent Octave checks, result interpretation,
 and remaining final-paper gates. Public artifact availability is described in
@@ -20,9 +25,10 @@ python -m experiments.runners.run_adversarial
 
 Every bundle records code/dependency commits, configuration, environment, and seeds.
 Raw values are the source of processed tables and figures. Null fields denote
-unmeasured/not applicable quantities. An LP oracle is exact for the finite supplied
-table up to solver tolerances; a sampled audit is an empirical lower bound on
-worst-case displacement. It does not provide a global certificate.
+unmeasured/not applicable quantities. The new conservative LP oracle retains
+ambiguous near-optimal cells to bound finite-table displacement under declared
+solver tolerances. Historical deterministic-cell estimates require revalidation
+with that wrapper. A sampled audit supplies an empirical lower bound.
 
 External code lives in pinned submodules under `external/`. The SNEE README states
 GNU LGPL availability; its repository does not contain a separate license file or
