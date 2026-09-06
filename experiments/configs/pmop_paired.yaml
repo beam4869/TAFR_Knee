@@ -1,0 +1,19 @@
+phase: 30-seed criterion-isolation extension
+problems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+objectives: [3, 5, 8]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+front_seed: 1729
+front_samples: 512
+candidate_budget: 17
+radius: 0.05
+objective_tolerance: 0.001
+min_improvement: 0.001
+min_deterioration: 0.001
+interior_samples: 8
+stability_iterations: 6
+validation_samples: 256
+validation_seed_offset: 100000
+normalization_policy: oracle_table_range
+workers: 4
+required_gate: pmop_numeric_parity
+interpretation: Same finite table, including official reference knees, for every method; no direct-search efficiency claim

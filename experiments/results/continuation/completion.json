@@ -1,0 +1,17 @@
+{
+  "pmop_expected_seed_jobs": 1260,
+  "pmop_observed_seed_jobs": 1260,
+  "pmop_failed_seed_jobs": 0,
+  "ablation_rows": 3300,
+  "snee_hessian_rows": 124,
+  "ammonia_windows": 12,
+  "pmop_direct_instances": 8,
+  "pmop_direct_lower_solves": 4688,
+  "pmop_direct_lower_budget_exhaustions": 4673,
+  "partial": false,
+  "raw_failure_records": 0,
+  "standardized_rows": 8524,
+  "maximum_ammonia_affine_residual": 1.4551915228366852e-11,
+  "lower_solver_warning": "Track B DE iteration limits retained; no global certificates",
+  "timing_warning": "PMOP checkpoints include both original LP and LP-validated accelerated stability; do not pool timing as a uniform implementation benchmark"
+}

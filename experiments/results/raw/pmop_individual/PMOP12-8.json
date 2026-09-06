@@ -1,0 +1,8 @@
+{
+  "rows": [],
+  "instance": {
+    "problem": "PMOP12-8",
+    "status": "failed",
+    "error": "ConfigurationError('reference must be strictly greater than ideal for every objective; remove or rescale effectively constant objectives at indices [0, 1, 2, 3, 4, 5]')"
+  }
+}

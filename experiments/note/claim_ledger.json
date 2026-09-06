@@ -1,0 +1,35 @@
+{
+  "exact_numbers": {
+    "values": {
+      "RpairC": 0.0,
+      "RfullC": 0.208806130178211,
+      "RvertexD": 0.17883362798981625,
+      "RexactD": 0.30000000000000004,
+      "RadiusA": 0.09999999999999998,
+      "ExitA": 1.4999999999962499,
+      "DetectSixteen": 43,
+      "DetectOneTwoEight": 97
+    },
+    "raw": "adversarial_phase1.json",
+    "analysis": "make_note_assets.main"
+  },
+  "PMOP_table": {
+    "raw": "pmop_pilot_table_range.json",
+    "analysis": "aggregate_results.main"
+  },
+  "SNEE_table": {
+    "raw": "snee_multistart_v2.json",
+    "analysis": "aggregate_results.main"
+  },
+  "ammonia_table": {
+    "raw": [
+      "ammonia_pilot.json",
+      "ammonia_pilot_global_range.json"
+    ],
+    "analysis": "make_note_assets.main"
+  },
+  "discrete_table": {
+    "raw": "discrete_pilot.json",
+    "analysis": "make_note_assets.main"
+  }
+}

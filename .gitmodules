@@ -1,0 +1,9 @@
+[submodule "external/snee"]
+	path = external/snee
+	url = https://github.com/tommaso-giovannelli/snee.git
+[submodule "external/pmops"]
+	path = external/pmops
+	url = https://github.com/GYResearch/PMOPs-Benchmark.git
+[submodule "external/ammonia"]
+	path = external/ammonia
+	url = https://github.com/beam4869/ML_scheduling.git

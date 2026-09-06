@@ -1,0 +1,5 @@
+variant,trials,returns,upper_bound_above_epsilon,witness_above_epsilon,full_table_rule_passes
+core_screen,300,234,12,1,217
+sampled_radius_gate,300,222,0,0,217
+conservative_radius_gate,300,222,0,0,217
+conservative_all_exits,300,221,0,0,221

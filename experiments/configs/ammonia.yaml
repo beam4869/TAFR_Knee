@@ -1,0 +1,15 @@
+phase: two-window direct-MILP pilot
+candidate_budget: 5
+radius: 0.05
+objective_tolerance: 0.001
+min_improvement: 0.001
+min_deterioration: 0.001
+interior_samples: 4
+stability_iterations: 3
+validation_samples: 256
+validation_seed_offset: 100000
+mip_relative_gap: 0.001
+lower_level_time_limit: 10
+seed: 0
+forecast_uncertainty: fixed
+stratification: temporal price-carbon Pearson correlation proxy, not objective-space correlation

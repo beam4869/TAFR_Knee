@@ -1,0 +1,19 @@
+phase: full-decision solver pilot
+problems: [1, 2, 4, 5, 8, 10, 13, 14]
+objectives: [3]
+seeds: [0]
+candidate_budget: 3
+radius: 0.05
+objective_tolerance: 0.001
+min_improvement: 0.001
+min_deterioration: 0.001
+interior_samples: 2
+stability_iterations: 3
+validation_samples: 128
+validation_seed_offset: 100000
+enforce_validation_ratio: 10
+lower_maxiter: 40
+lower_popsize: 5
+workers: 2
+normalization_policy: payoff
+interpretation: Heuristic full-space solver; no global certificate or equal-budget superiority claim
