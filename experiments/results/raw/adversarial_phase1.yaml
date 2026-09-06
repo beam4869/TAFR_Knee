@@ -1,0 +1,51 @@
+name: adversarial_phase1
+base_tafr_commit: 9f7a65d7ffeaddedf2969b7db3d764623e0cca27
+cases:
+- E0-A
+- E0-B
+- E0-C
+- E0-D
+- E0-E
+- E0-F
+scales:
+- 1
+- 10
+- 100
+- 1000
+- 10000
+interior_samples:
+- 0
+- 4
+- 8
+- 16
+- 32
+- 64
+- 128
+sampling_seeds: 100
+adaptive_rounds:
+- 0
+- 1
+- 2
+- 4
+smooth_tau:
+- 0.001
+- 0.01
+minimum_gains:
+- 0.0001
+- 0.001
+- 0.005
+- 0.01
+flat_gains:
+- 0.1
+- 0.01
+- 0.001
+- 0.0001
+- 1.0e-05
+- 1.0e-06
+- 1.0e-07
+radius: 0.05
+objective_tolerance: 1.0e-08
+extreme_threshold: 0.05
+kappa_min: 1.0
+candidate_resolution: 20
+validation: LP optimality-cell oracle, HiGHS, deterministic tie order
