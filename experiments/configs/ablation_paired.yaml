@@ -1,0 +1,12 @@
+phase: paired mechanism and discrete ablations
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+cases: [A, B, C, D, flat_gain, linear, unsupported, portfolio0, portfolio1, portfolio2]
+variants: [full, no_normalization, pairwise, vertices, no_nonextreme, no_tradeoff, no_stability_tiebreak, no_abstention, default_gain, AWT, adaptive]
+candidate_budget: 17
+radius: 0.05
+interior_samples: 8
+stability_iterations: 6
+min_gain: 0.001
+validation_samples: 512
+workers: 4
+interpretation: Full denotes the declared meaningful-gain experimental variant; production defaults are unchanged
