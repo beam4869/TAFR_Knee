@@ -100,9 +100,10 @@ result. The original uploaded papers and proposal/CV are never redistributed.
 
 ## Publication status
 
-Code, tests, configurations and reporting scripts are published on
-`experiments/common-core-v1`. Automatic approval review rejected public upload of
-the compiled, unpublished experiment PDF because it did not consider the current
-authorization specific enough for that payload. The complete scientific artifact
-archive remains private pending explicit public-release approval. See
-`PUBLICATION_STATUS.md` for the older release's archive and artifact limitation.
+Code, tests, configurations, reporting scripts and measured artifacts are published
+on `experiments/common-core-v1`. The owner explicitly authorized public release
+after the initial automatic-review block. Raw results are preserved in grouped ZIP
+archives; figures, smaller summaries and the historical Note PDF are directly
+available. Run `python experiments/restore_artifacts.py` before rebuilding reports
+from archived measurements. See [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md)
+for download paths, SHA-256 verification and the historical Note's scope.

@@ -1,0 +1,4 @@
+method,trials,returns,successes,median_selected_error,failures
+TAFR-meaningful-gain,1260,1094,564,0.01812633238955146,0
+TPE-2024-grid,1260,1260,460,0.22409486134022602,0
+equal,1260,1260,780,0.0,0

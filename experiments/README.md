@@ -1,4 +1,4 @@
-> Publication status: see [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md). Large result bundles and binary artifacts are in the separate complete release.
+> Results, figures and the historical Note PDF are published. See [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md) for downloads and the verified raw-data restore command.
 
 # Common-core experiments
 

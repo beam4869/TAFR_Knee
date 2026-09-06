@@ -1,0 +1,27 @@
+{
+  "complete_blocks": 42,
+  "excluded_blocks": 0,
+  "pairs": [
+    {
+      "versus": 1,
+      "p": 0.0007079557981241137,
+      "A12_lower_is_better": 0.3866213151927438,
+      "holm_p": 0.0014159115962482274
+    },
+    {
+      "versus": 2,
+      "p": 0.19568373387383686,
+      "A12_lower_is_better": 0.5496031746031746,
+      "holm_p": 0.19568373387383686
+    }
+  ],
+  "friedman_p": 0.00087912332745086,
+  "metric": "1 - within-instance Success@0.025 rate",
+  "methods": [
+    "TAFR-meaningful-gain",
+    "equal",
+    "TPE-2024-grid"
+  ],
+  "block": "problem and objective count; 42 final blocks",
+  "partial": false
+}

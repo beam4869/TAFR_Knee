@@ -1,0 +1,9 @@
+algorithm,normalization,hessian,trials,completed,median_knee_distance,median_mcf
+DIRECT,normalized,corrected_diagonal,1,1,2.390051341892927e-05,1.0000123569283845
+DIRECT,normalized,pinned_upstream,1,1,2.390051341892927e-05,1.0000123569283859
+DIRECT,published,corrected_diagonal,1,1,1.702894521453754e-08,1.0000000093654422
+DIRECT,published,pinned_upstream,1,1,1.702894521453754e-08,1.0000000093654422
+NM,normalized,corrected_diagonal,30,30,2.326754456674113e-06,1.0000000018805224
+NM,normalized,pinned_upstream,30,30,2.326754456674113e-06,1.0000000018805228
+NM,published,corrected_diagonal,30,30,1.049003115930202e-08,1.000000005769223
+NM,published,pinned_upstream,30,30,1.049003115930202e-08,1.0000000057692229
