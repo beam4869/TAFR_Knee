@@ -30,9 +30,18 @@ def load_upstream():
     return SyntheticMultiobjProblem,Snee
 
 
-def make_upstream(name, algorithm="NM", seed=0, normalized=False, flatten_jacobian=False):
+def make_upstream(name, algorithm="NM", seed=0, normalized=False, flatten_jacobian=False,
+                  corrected_grv2_hessian=False):
     Problem,Snee=load_upstream()
     f=Problem(name,seed=42) # fixed instance; optimizer seeds do not change GRV1
+    if corrected_grv2_hessian:
+        if name != "GRV2":
+            raise ValueError("The Hessian correction is defined only for GRV2")
+        # A separately named research variant. Do not edit the pinned source.
+        # np.diag(column) extracts a diagonal; np.diag(flat) constructs one.
+        for i, shift in enumerate((0., 2.)):
+            f.prob.hess_f_dict[i] = lambda x, shift=shift: np.diag(
+                2 / f.prob.dim + 6 * (np.asarray(x).reshape(-1) - shift) ** 2)
     run=Snee(f,1,True,algorithm,False,False,iprint=0,seed=seed)
     initial=np.random.RandomState(seed).uniform(0,1,(f.prob.dim,1))
     # SciPy now rejects (n,1) SLSQP objective Jacobians. This optional adapter
@@ -65,8 +74,10 @@ def mcf(f,w,x):
     return float(ratios.max())
 
 
-def official_core(name,algorithm="NM",seed=0,normalized=False,compat=False,start=None):
-    f,run,x0,ideal,scale=make_upstream(name,algorithm,seed,normalized,compat)
+def official_core(name,algorithm="NM",seed=0,normalized=False,compat=False,start=None,
+                  corrected_grv2_hessian=False):
+    f,run,x0,ideal,scale=make_upstream(name,algorithm,seed,normalized,compat,
+                                    corrected_grv2_hessian)
     # MCM/most-changing-front diagnostics never feed back into NM/DIRECT.
     # Disable ONLY those callbacks to isolate knee-search work and avoid the
     # upstream O(50**(q-1)) visualization grid for q=5.
@@ -95,6 +106,7 @@ def official_core(name,algorithm="NM",seed=0,normalized=False,compat=False,start
         if f.prob.num_eq_constr:
             violation=max(violation,float(np.max(np.abs(f.prob.equality_constraints(x.flatten())))))
     return dict(weight=w,decision=x.flatten(),objectives=transformed*scale+ideal,
+                hessian_variant="corrected_diagonal" if corrected_grv2_hessian else "pinned_upstream",
                 mcf=mcf(f,w,x),iterations=len(history),history=history,objective_history=values,
                 normalization_ideal=ideal,normalization_scale=scale,
                 constraint_violation=violation,**counts)
